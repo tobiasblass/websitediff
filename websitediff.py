@@ -18,7 +18,14 @@ def website_cache_file(url):
     _,loc,path,*ignore = urlparse(url)
     if path and path[0] == '/':
         path = path[1:]
-    return cache_dir/loc/path
+    cache_file = (cache_dir/loc/path).resolve()
+    #Sanity check: cache_file is below cache_dir.
+    try:
+        cache_file.relative_to(cache_dir)
+    except ValueError:
+        raise RuntimeError(f'Cache file for {url} is {cache_file}, which is not below {cache_dir}. This should be impossible! Aborting to prevent data loss.')
+
+    return cache_file
     
 def diff_website(url, store_new=True):
     diff = None
@@ -38,7 +45,12 @@ def diff_website(url, store_new=True):
 
 
     if store_new:
-        cache_file.write_text(req.text)
+        try:
+            cache_file.unlink()
+        except FileNotFoundError:
+            pass
+        with cache_file.open(mode='x') as fp:
+            fp.write(req.text)
     
     return diff
 
