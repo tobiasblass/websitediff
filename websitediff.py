@@ -35,13 +35,13 @@ def diff_website(url, store_new=True):
     cache_file = website_cache_file(url)
     cache_file.parent.mkdir(parents=True, exist_ok=True)
     if cache_file.exists():
-        diff = difflib.unified_diff(cache_file.read_text().split('\n'),
-                                    req.text.split('\n'),
-                                    fromfile=url,
-                                    tofile=url,
-                                    lineterm='',
-                                    fromfiledate=time.ctime(cache_file.stat().st_mtime),
-                                    tofiledate=time.ctime())
+        diff = list(difflib.unified_diff(cache_file.read_text().split('\n'),
+                                         req.text.split('\n'),
+                                         fromfile=url,
+                                         tofile=url,
+                                         lineterm='',
+                                         fromfiledate=time.ctime(cache_file.stat().st_mtime),
+                                         tofiledate=time.ctime()))
 
 
     if store_new:
