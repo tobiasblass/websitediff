@@ -8,6 +8,10 @@ The tool expects a list of URLs in its configuration file (`$XDG_CONFIG_HOME/web
 
 By default, the tool just prints the URLs that have changed. Modify the `print_diff` variable to get a textual diff.
 
+## Configuration file format
+
+One URL per line. Comments are started by #.
+
 ## Ideas
 
 - Output an HTML rendering of the website with differences marked

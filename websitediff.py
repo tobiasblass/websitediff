@@ -66,6 +66,10 @@ def main(urls=None):
     if urls is None:
         with config_file.open() as config:
             urls = list(config)
+        # Remove comments and whitespace
+        urls = [ (url.split('#', maxsplit=1)[0]).strip() for url in urls]
+        # Remove empty lines
+        urls = [ url for url in urls if url ]
     for url in urls:
         if 'http' not in url:
             url = f'https://{url}'
