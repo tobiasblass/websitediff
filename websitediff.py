@@ -2,14 +2,22 @@
 
 import requests
 from pathlib import Path
-from os import environ
+from os import environ,path
 import difflib
 from urllib.parse import urlparse
 import time
 import sys
 
+
+# Set to True to look for the config file in the directory of this file instead of $XDG_CONFIG_HOME
+config_in_script_dir = False
+
 cache_dir = Path(environ.get('XDG_CACHE_HOME', Path.home()/".cache"), "websitediff")
-config_file = Path(environ.get('XDG_CONFIG_HOME', Path.home()/".config"), "websitediff.conf")
+
+if config_in_script_dir and __file__:
+    config_file = (Path(path.realpath(__file__)).parent)/'websitediff.conf'
+else:
+    config_file = Path(environ.get('XDG_CONFIG_HOME', Path.home()/".config"), "websitediff.conf")
 
 #Change this variable to print the website diff in textual form. Disabled by default
 print_diff = False
